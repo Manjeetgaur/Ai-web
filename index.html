@@ -45,6 +45,41 @@
   </style>
 </head>
 <body>
+  <h2>Upload Video</h2>
+<form id="uploadForm">
+  <input type="file" id="videoFile" name="video" accept="video/*" />
+  <button type="submit">Upload</button>
+</form>
+
+<p id="response"></p>
+
+<script>
+  const form = document.getElementById("uploadForm");
+  const responseBox = document.getElementById("response");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById("videoFile");
+    if (!fileInput.files.length) {
+      alert("Please select a video file!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("video", fileInput.files[0]);
+
+    try {
+      const res = await fetch("https://YOUR_BACKEND_URL.onrender.com/upload", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      responseBox.innerText = data.message || "Upload done!";
+    } catch (err) {
+      responseBox.innerText = "❌ Upload failed: " + err.message;
+    }
+  });
+</script>
   <header>🚀 AI Video Editing Website</header>
 
   <section>
